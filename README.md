@@ -113,8 +113,9 @@ Pour l'évitement d'une zone, le code vérifie déjà que le trajet ne descend p
 
 ## II - DMP
 
-Un DMP est un système dynamique stable qui « ressort » vers un but, auquel on ajoute un terme appris qui donne sa forme au mouvement. Il a été introduit par Ijspeert, Nakanishi et Schaal (2002, 2013) pour apprendre des gestes par démonstration.
+Un DMP est un système dynamique stable qui converge naturellement vers une cible, auquel on ajoute un terme appris qui donne sa forme au mouvement. Ca permet d'apprendre des gestes par démonstration.
 Son intérêt : une seule démonstration suffit, le mouvement converge toujours vers le but, et on peut changer le but, la durée ou le point de départ sans réapprendre.
+
 
 ### II.1 Le système de transformation
 
@@ -128,7 +129,8 @@ Chaque dimension du mouvement (position $y$) suit un ressort-amortisseur, plus u
 \tau \dot{y} = v
 ```
 
-- $g$ : le but (position finale) ; $y_0$ : la position de départ ;
+- $g$ : le but (position finale) ;
+- $y_0$ : la position de départ ;
 - $\tau$ : la durée du mouvement (le diviser accélère tout) ;
 - $\alpha_z$ (« alpha ») : l'amortissement, il règle la rapidité de réaction ;
 - $\beta_z$ (« beta ») : la raideur du ressort vers le but.
@@ -293,7 +295,8 @@ La pince se place à 20 cm devant la base et 12 cm de haut, puis trace un ∞ co
 - largeur : la base tourne de ±0,5 rad (environ ±29°) ;
 - hauteur : z varie de ±4 cm autour de 12 cm.
 
-La courbe est une lemniscate de Gerono : horizontal = sin θ, vertical = sin 2θ, avec θ qui va de 0 à 2π selon un profil minimum jerk. Le tracé commence et finit au centre, à l'arrêt, ce qui permet de le rejouer en boucle.
+
+La trajectoire suivie est une lemniscate de Gerono (en forme de huit couché), définie par les coordonnées horizontale $\sin(\theta)$ et verticale $\sin(2\theta)$, où l'angle $\theta$ évolue de $0$ à $2\pi$ selon un profil de vitesse minimum jerk. Le mouvement démarre et s'achève au centre à vitesse nulle, ce qui permet de l'exécuter en boucle de manière fluide et sans à-coups
 
 ![Démonstration ∞ et sortie du DMP, dimension par dimension](examples/dmp_plots/0_infini_demo_vs_dmp.png)
 

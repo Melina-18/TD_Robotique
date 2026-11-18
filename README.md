@@ -20,18 +20,94 @@ https://github.com/user-attachments/assets/becbd2c6-1f79-417c-afc1-f7b2befdfa70
 
 ## I - LQR
 
-Le LQR (Linear Quadratic Regulator) est un contrô leur par retour d'é tat qui cherche à amener ou maintenir un systè me à l'é quilibre, le plus efficacement possible. La loi de contrô le est un retour d’é tat :
-U(t)=-K*x(t)
-On a une fonctionne de cout
-𝐽= ∫(𝑥𝑇𝑄𝑥+𝑢𝑇𝑅𝑢)𝑑𝑡∞0
-La solution optimale est un retour d'é tat 𝑢=𝑢̿−𝐾(𝑥−𝑥̿), avec 𝐾 = 𝑅⁻¹𝐵ᵀ𝑃, où 𝑃 est la solution de l'é quation algé brique de Riccati :
-𝐴𝑇𝑃+𝑃𝐴−𝑃𝐵𝑅−1𝐵𝑇𝑃+𝑄=0
-Pour utiliser le LQR on a besoin d’un modè le mathé matique du robot. Nous n'avons pas construit les modè les du robot nous-mê mes : ils viennent de la bibliothè que lerobot-kinematics :
--
-Modèle cinématique. get_robot('so100'), dans lerobot_Kinematics.py.
--
-Modè le MuJoCo. so_100.xml et scene.xml.
-Modèle y = Ax + Bu. L'é tat contient les 6 positions et les 6 vitesses articulaires. M est la matrice d'inertie lue dans MuJoCo dans la posture initiale et D l'amortissement des articulations
+Le LQR (*Linear Quadratic Regulator*) est un contrôleur par retour d'état qui cherche à amener ou maintenir un système à l'équilibre, le plus efficacement possible. La loi de contrôle est un retour d'état :
+
+$$
+u(t) = -K\,x(t)
+$$
+
+On a une fonction de coût
+
+$$
+J = \int_{0}^{\infty} \left( x^{T} Q x + u^{T} R u \right) dt
+$$
+
+La solution optimale est un retour d'état $u = \bar{\bar{u}} - K(x - \bar{\bar{x}})$, avec $K = R^{-1} B^{T} P$, où $P$ est la solution de l'équation algébrique de Riccati :
+
+$$
+A^{T} P + P A - P B R^{-1} B^{T} P + Q = 0
+$$
+
+Pour utiliser le LQR on a besoin d'un modèle mathématique du robot. Nous n'avons pas construit les modèles du robot nous-mêmes : ils viennent de la bibliothèque `lerobot-kinematics` :
+
+- **Modèle cinématique.** `get_robot('so100')`, dans `lerobot_Kinematics.py`.
+- **Modèle MuJoCo.** `so_100.xml` et `scene.xml`.
+
+### Modèle $\dot{x} = Ax + Bu$
+
+L'état contient les 6 positions et les 6 vitesses articulaires. $M$ est la matrice d'inertie lue dans MuJoCo dans la posture initiale et $D$ l'amortissement des articulations :
+
+$$
+M\ddot{q} + D\dot{q} = u
+\quad \Longrightarrow \quad
+\dot{x} =
+\begin{bmatrix} 0 & I \\ 0 & -M^{-1}D \end{bmatrix} x
++
+\begin{bmatrix} 0 \\ M^{-1} \end{bmatrix} u
+$$
+
+```python
+M_full = np.zeros((mjmodel.nv, mjmodel.nv))
+mujoco.mj_fullM(mjmodel, M_full, mjdata.qM)
+M_robot = M_full[np.ix_(qvel_indices, qvel_indices)]
+M_inv = np.linalg.inv(M_robot)
+D_robot = np.diag(mjmodel.dof_damping[qvel_indices])
+
+A_mat = np.zeros((n_states, n_states))
+A_mat[:dof, dof:] = np.eye(dof)
+A_mat[dof:, dof:] = -M_inv @ D_robot
+
+B_mat = np.zeros((n_states, dof))
+B_mat[dof:, :] = M_inv
+
+C_mat = np.eye(n_states)
+D_mat = np.zeros((n_states, dof))
+
+sys_lineare = statespace.StateSpaceSystem(A_mat, B_mat, C_mat, D_mat)
+```
+
+### Choix de $Q$ et $R$
+
+- **$Q$ grand** : l'écart coûte cher. Le mouvement est plus rapide et plus précis, avec des commandes plus fortes ;
+- **$R$ grand** : l'effort coûte cher. Le mouvement est plus lent et plus doux.
+
+Ce qui compte est le rapport $Q/R$ : multiplier $Q$ et $R$ par le même nombre donne le même $K$.
+
+```python
+def guadagno_lqr(sys_lineare, facteur_q_pos, facteur_q_vel, r):
+    cf = costfunction.QuadraticCostFunction.from_sys(sys_linear)
+    cf.Q = np.diag(np.concatenate([facteur_q_pos * Q_POS,
+                                   facteur_q_vel * Q_VEL]))
+    cf.R = r * np.eye(dof)
+    xbar_init = np.concatenate([init_qpos, np.zeros(dof)])
+    ctl_lqr = lqr.synthesize_lqr_controller(sys_lineare, cf,
+                                            xbar=xbar_init,
+                                            ubar=np.zeros(dof))
+    poli = np.linalg.eigvals(sys_lineare.A - sys_lineare.B @ ctl_lqr.K)
+    return ctl_lqr, poli
+```
+
+Après, dans le code, on utilise cette fonction pour les différentes valeurs de $Q$ et $R$. On fait 4 tests différents pour voir les changements sur $Q_{POS}$, sur $Q_{VEL}$ et sur $R$ séparément.
+
+<p align="center">
+  <img src="images/duree_cycle.png" width="48%">
+  <img src="images/trajectoire.png" width="48%">
+</p>
+
+### Évitement d'une zone
+
+Pour l'évitement d'une zone, le code vérifie déjà que le trajet ne descend pas sous une hauteur minimale avant de bouger le robot : le même contrôle pourrait interdire un volume donné.
+
 
 ## II - DMP
 

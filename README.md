@@ -20,6 +20,19 @@ https://github.com/user-attachments/assets/becbd2c6-1f79-417c-afc1-f7b2befdfa70
 
 ## I - LQR
 
+Le LQR (Linear Quadratic Regulator) est un contrô leur par retour d'é tat qui cherche à amener ou maintenir un systè me à l'é quilibre, le plus efficacement possible. La loi de contrô le est un retour d’é tat :
+U(t)=-K*x(t)
+On a une fonctionne de cout
+𝐽= ∫(𝑥𝑇𝑄𝑥+𝑢𝑇𝑅𝑢)𝑑𝑡∞0
+La solution optimale est un retour d'é tat 𝑢=𝑢̿−𝐾(𝑥−𝑥̿), avec 𝐾 = 𝑅⁻¹𝐵ᵀ𝑃, où 𝑃 est la solution de l'é quation algé brique de Riccati :
+𝐴𝑇𝑃+𝑃𝐴−𝑃𝐵𝑅−1𝐵𝑇𝑃+𝑄=0
+Pour utiliser le LQR on a besoin d’un modè le mathé matique du robot. Nous n'avons pas construit les modè les du robot nous-mê mes : ils viennent de la bibliothè que lerobot-kinematics :
+-
+Modèle cinématique. get_robot('so100'), dans lerobot_Kinematics.py.
+-
+Modè le MuJoCo. so_100.xml et scene.xml.
+Modèle y = Ax + Bu. L'é tat contient les 6 positions et les 6 vitesses articulaires. M est la matrice d'inertie lue dans MuJoCo dans la posture initiale et D l'amortissement des articulations
+
 ## II - DMP
 
 Un DMP est un système dynamique stable qui « ressort » vers un but, auquel on ajoute un terme appris qui donne sa forme au mouvement. Il a été introduit par Ijspeert, Nakanishi et Schaal (2002, 2013) pour apprendre des gestes par démonstration.

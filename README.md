@@ -99,6 +99,10 @@ def guadagno_lqr(sys_lineare, facteur_q_pos, facteur_q_vel, r):
 
 Après, dans le code, on utilise cette fonction pour les différentes valeurs de $Q$ et $R$. On fait 4 tests différents pour voir les changements sur $Q_{POS}$, sur $Q_{VEL}$ et sur $R$ séparément.
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/03433707-37e6-4f4f-b7dd-99ab2f72b5da" width="48%">
+  <img src="https://github.com/user-attachments/assets/3b5a016d-12f0-4a3b-9dbb-a0e788d5ed36" width="48%">
+</p>
 <img width="386" height="293" alt="trajectoire" src="https://github.com/user-attachments/assets/3b5a016d-12f0-4a3b-9dbb-a0e788d5ed36" />
 <img width="371" height="302" alt="duree_cycle" src="https://github.com/user-attachments/assets/03433707-37e6-4f4f-b7dd-99ab2f72b5da" />
 

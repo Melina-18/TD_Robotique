@@ -43,7 +43,7 @@ Pour utiliser le LQR on a besoin d'un modèle mathématique du robot. Nous n'avo
 - **Modèle cinématique.** `get_robot('so100')`, dans `lerobot_Kinematics.py`.
 - **Modèle MuJoCo.** `so_100.xml` et `scene.xml`.
 
-### Modèle $\dot{x} = Ax + Bu$
+### I.1 Modèle $\dot{x} = Ax + Bu$
 
 L'état contient les 6 positions et les 6 vitesses articulaires. $M$ est la matrice d'inertie lue dans MuJoCo dans la posture initiale et $D$ l'amortissement des articulations :
 
@@ -76,7 +76,7 @@ D_mat = np.zeros((n_states, dof))
 sys_lineare = statespace.StateSpaceSystem(A_mat, B_mat, C_mat, D_mat)
 ```
 
-### Choix de $Q$ et $R$
+### I.2 Choix de $Q$ et $R$
 
 - **$Q$ grand** : l'écart coûte cher. Le mouvement est plus rapide et plus précis, avec des commandes plus fortes ;
 - **$R$ grand** : l'effort coûte cher. Le mouvement est plus lent et plus doux.
@@ -106,7 +106,7 @@ Après, dans le code, on utilise cette fonction pour les différentes valeurs de
 
 
 
-### Évitement d'une zone
+### I.3 Évitement d'une zone
 
 Pour l'évitement d'une zone, le code vérifie déjà que le trajet ne descend pas sous une hauteur minimale avant de bouger le robot : le même contrôle pourrait interdire un volume donné.
 

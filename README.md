@@ -284,7 +284,8 @@ En 4 s, la pince part de la position repliée, avance de x = 0,11 m à 0,25 m en
 
 Chaque courbe de la démo est construite avec un profil « minimum jerk », à vitesse nulle au début et à la fin : c'est le type de mouvement qu'un DMP reproduit le mieux.
 
-![Démonstration pick et sortie du DMP, dimension par dimension](examples/dmp_plots/0_pick_demo_vs_dmp.png)
+<img width="1400" height="600" alt="image" src="https://github.com/user-attachments/assets/b3b73c2f-298e-47e5-ab9e-123db4ea97c7" />
+
 
 *Démo (trait plein) et DMP (pointillé) pour les 8 dimensions, en secondes. Après 4 s, le DMP continue 2 s pour se stabiliser sur le but.*
 

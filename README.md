@@ -299,7 +299,8 @@ La pince se place à 20 cm devant la base et 12 cm de haut, puis trace un ∞ co
 
 La trajectoire suivie est une lemniscate de Gerono (en forme de huit couché), définie par les coordonnées horizontale $\sin(\theta)$ et verticale $\sin(2\theta)$, où l'angle $\theta$ évolue de $0$ à $2\pi$ selon un profil de vitesse minimum jerk. Le mouvement démarre et s'achève au centre à vitesse nulle, ce qui permet de l'exécuter en boucle de manière fluide et sans à-coups
 
-![Démonstration ∞ et sortie du DMP, dimension par dimension](examples/dmp_plots/0_infini_demo_vs_dmp.png)
+<img width="1400" height="600" alt="image" src="https://github.com/user-attachments/assets/3c511780-3fb2-4eeb-b342-45a19d518ed2" />
+
 
 ### 5.3 Précision mesurée
 
@@ -335,25 +336,29 @@ Les quatre graphes ci-dessous sont produits par `examples/dmp_alpha_beta_plots.p
 
 Sans terme appris, le système passe de 0 au but 1. Avec β = α/4, α = 50 atteint le but en 0,3 s environ, alors que α = 5 n'y est pas après 2 s. À α fixé, ζ = 0,25 dépasse le but de 40 % puis oscille, et ζ = 2 est très lent : α règle la rapidité, le rapport β/α règle les oscillations.
 
-![Figure 1 : réponse du ressort-amortisseur selon alpha et beta](examples/dmp_plots/1_reponse_ressort.png)
+<img width="1800" height="660" alt="image" src="https://github.com/user-attachments/assets/93b48af3-7775-4f61-9e65-427f4bb8e520" />
+
 
 ### 6.2 Généralisation à un nouveau but
 
 Le « pick », appris vers z = 0,08 m, est rejoué vers z = 0,04 m. Avec α ≥ 25, le système rejoint le nouveau but ; avec α = 5, il remonte vers 0,10 m et n'y arrive pas dans le temps imparti. Un β trop grand ajoute un creux parasite au tout début.
 
-![Figure 2 : généralisation à un nouveau but selon alpha et beta](examples/dmp_plots/2_nouveau_but.png)
+<img width="1800" height="660" alt="image" src="https://github.com/user-attachments/assets/53e03072-7dbf-4a95-8f48-b68699427ac9" />
+
 
 ### 6.3 Rejet d'une perturbation
 
 Pendant le ∞, la base est poussée de +0,3 rad à t = 3 s. Avec α = 50, le mouvement revient sur la trajectoire apprise en moins d'une seconde ; avec α = 5, il dérive jusqu'à la fin et le tracé est déformé. Un système sous-amorti (ζ ≤ 0,5) oscille après la poussée.
 
-![Figure 3 : rejet d'une perturbation selon alpha et beta](examples/dmp_plots/3_perturbation.png)
+<img width="1800" height="660" alt="image" src="https://github.com/user-attachments/assets/1093f18c-bfc8-4be2-b65d-348760f45850" />
+
 
 ### 6.4 Reproduction de la démonstration
 
 Sans changement de but ni perturbation, toutes les courbes se superposent au ∞ de la démo, avec un écart maximal de 1,7 à 2,3 mm. Les poids appris compensent α et β : ces paramètres ne se voient pas tant que le robot ne s'écarte pas de ce qu'il a appris.
 
-![Figure 4 : reproduction du signe infini selon alpha et beta](examples/dmp_plots/4_reproduction.png)
+<img width="1800" height="900" alt="image" src="https://github.com/user-attachments/assets/f1df9ba3-afcc-4b77-8e86-df13f269ee75" />
+
 
 ### 6.5 Valeurs conseillées
 

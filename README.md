@@ -1,5 +1,5 @@
 # TD Robotique
-
+Mélina BRUTIER, Ilona BERTIN, Giorgio CHIARAMONTE, Florent CHATEL, Younes BEN AMEUR
 
 ## Partie 2 : LeRobot
 
